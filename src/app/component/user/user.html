@@ -1,0 +1,266 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>User Tasks</h3>
+    <button class="btn btn-success" (click)="openAddModal()">
+      + Add Task
+    </button>
+  </div>
+  <div *ngIf="showDropdown" class="mb-3">
+
+  <select [(ngModel)]="selectedStatus1" class="form-select w-auto d-inline">
+     <option [ngValue]="null">Change Selected Status</option>
+    <option [ngValue]="statusEnum.Pending">Pending</option>
+    <option [ngValue]="statusEnum.Completed">Completed</option>
+  </select>
+
+  <button class="btn btn-success ms-2" (click)="updateStatus()">
+    Update Status
+  </button>
+
+</div>
+
+  <div class="row mb-3">
+    <div class="col-md-2">
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i> <!-- Bootstrap Icons ka search icon -->
+        </span>
+        <input type="text" class="form-control" placeholder="Search" (input)="searchUserTask($event)" />
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="col-md-3">
+        <select class="form-control" [(ngModel)]="selectedStatus">
+          <option [ngValue]="null">Status</option>
+          <option *ngFor="let s of statusDropdown" [ngValue]="s.id">
+            {{ s.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="col-md-3">
+        <select class="form-control" [(ngModel)]="selectedPriority">
+          <option [ngValue]="null">Priority</option>
+          <option *ngFor="let p of priorityDropdown" [ngValue]="p.id">
+            {{ p.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" (click)="applyStatusFilter()">
+        Filter
+      </button>
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-secondary w-100" (click)="resetFilter()">
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th></th>
+        <th (click)="onSort('id')">Id</th>
+        <th (click)="onSort('title')">Title</th>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let task of taskDetails; let i = index">
+        <td><input *ngIf="task.status !== statusEnum.Completed" type="checkbox"  [checked]="selectedTaskIds.includes(task.id)" (change)="onCheckboxChange($event, task.id)"></td>
+        <td>{{task.id}}</td>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.dueDate | date }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+              'bg-success': task.status === statusEnum.Completed,
+              'bg-warning text-dark': task.status === statusEnum.Pending
+            }">
+            {{statusEnum[task.status] }}
+          </span>
+        </td>
+        <td>
+          <span class="badge" [ngClass]="{
+              'bg-danger': task.priority === priorityEnum.High,
+              'bg-primary': task.priority === priorityEnum.Medium,
+              'bg-secondary': task.priority === priorityEnum.Low
+            }">
+            {{priorityEnum[task.priority] }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" *ngIf="task.status !== statusEnum.Completed" (click)="editTask(task)">
+            Edit
+          </button>
+          <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#taskModal" *ngIf="task.status == statusEnum.Completed" (click)="viewTask(task)">
+            View
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item" [class.disabled]="currentPage==1"><a class="page-link"  (click)="onPageChange(currentPage-1)">Previous</a></li>
+    <li class="page-item"  [class.active]="page==currentPage" *ngFor="let page of generatePageNumber()"><a class="page-link"(click)= "onPageChange(page)">{{page}}</a></li>
+    <li class="page-item" [class.disabled]="currentPage==totalPages"><a class="page-link"  (click)="onPageChange(currentPage+1)">Next</a></li>
+  </ul>
+</nav>
+</div>
+
+<input type="text" [(ngModel)]="userName">
+<h2>Two Way Binding</h2>
+<p>{{userName}}</p> 
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ isEditMode ? 'Update Student' : 'Add Student' }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="usertaskForm" (ngSubmit)="OnSubmit()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <input type="text" placeholder="Enter Title" formControlName="title" class="form-control">
+            <div *ngIf="usertaskForm.get('title')?.touched && usertaskForm.get('title')?.invalid"
+              class="text-danger small mt-1">
+              title is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <input type="text" placeholder="Enter Description" formControlName="description" class="form-control">
+            <div *ngIf="usertaskForm.get('description')?.touched && usertaskForm.get('description')?.invalid"
+              class="text-danger small mt-1">
+             description is required.
+            </div>
+          </div>
+          <div class="mb-3">
+            <input type="date" placeholder="Enter dueDate" formControlName="dueDate" class="form-control">
+            <div *ngIf="usertaskForm.get('dueDate')?.touched && usertaskForm.get('dueDate')?.invalid"
+              class="text-danger small mt-1">
+              dueDate is required.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <select class="form-control custom-email-input" formControlName="status">
+              <option [ngValue]="null">Select status</option>
+              <option *ngFor="let status of statusDropdown" [ngValue]="status.id">{{ status.name }}
+              </option>
+            </select>
+            <div *ngIf="usertaskForm.get('status')?.touched && usertaskForm.get('status')?.invalid"
+              class="text-danger small mt-1">
+              Status is required.
+            </div>
+          </div>
+
+
+          <div class="mb-3">
+            <select class="form-control custom-email-input" formControlName="priority">
+              <option [ngValue]="null">Select Priority</option>
+              <option *ngFor="let priority of priorityDropdown" [ngValue]="priority.id">{{priority.name}}</option>
+            </select>
+            <div *ngIf="usertaskForm.get('priority')?.touched && usertaskForm.get('priority')?.invalid" class="text-danger small mt-1">priority is required</div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Update' : 'Save' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- View Task Modal -->
+
+<div class="modal fade" id="taskModal" tabindex="-1" aria-hidden="true">
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">
+          Task Details
+        </h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <div class="modal-body" *ngIf="selectedTask">
+
+        <p>
+          <strong>Id:</strong>
+          {{ selectedTask.id }}
+        </p>
+
+        <p>
+          <strong>Title:</strong>
+          {{ selectedTask.title }}
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          <span class="badge" [ngClass]="{
+              'bg-success': selectedTask.status === statusEnum.Completed,
+              'bg-warning text-dark': selectedTask.status === statusEnum.Pending
+            }">
+            {{statusEnum[selectedTask.status] }}
+          </span>
+        </p>
+
+        <p>
+          <strong>Description:</strong>
+          <span class="badge" [ngClass]="{
+              'bg-danger': selectedTask.priority === priorityEnum.High,
+              'bg-primary': selectedTask.priority === priorityEnum.Medium,
+              'bg-secondary': selectedTask.priority === priorityEnum.Low
+            }">
+            {{priorityEnum[selectedTask.priority] }}
+          </span>
+        </p>
+        <p>
+          <strong>Due Date:</strong>
+          {{ selectedTask.dueDate | date }}
+
+        <p>
+          <strong>Description:</strong>
+          {{ selectedTask.description }}
+        </p>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>

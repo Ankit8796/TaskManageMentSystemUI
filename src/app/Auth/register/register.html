@@ -1,0 +1,55 @@
+<!-- src/app/register/register.component.html -->
+<div class="container mt-5" style="max-width: 500px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4">Register</h3>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+        <!-- First Name -->
+        <div class="mb-3">
+          <label class="form-label">First Name</label>
+          <input formControlName="firstName" type="text" class="form-control" 
+            [ngClass]="{'is-invalid': registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched}">
+          <div class="invalid-feedback">Please enter first name</div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-3">
+          <label class="form-label">Last Name</label>
+          <input formControlName="lastName" type="text" class="form-control"
+            [ngClass]="{'is-invalid': registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched}">
+          <div class="invalid-feedback">Please enter last name</div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input formControlName="email" type="email" class="form-control"
+            [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}">
+          <div class="invalid-feedback">Enter a valid email</div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input formControlName="password" type="password" class="form-control"
+            [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}">
+          <div class="invalid-feedback">Password must be at least 6 characters</div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+          <label class="form-label">Confirm Password</label>
+          <input formControlName="confirmPassword" type="password" class="form-control"
+            [ngClass]="{'is-invalid': (registerForm.get('confirmPassword')?.touched && registerForm.hasError('notMatching')) || (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched)}">
+          <div class="invalid-feedback">
+            {{ registerForm.hasError('notMatching') ? 'Passwords do not match' : 'Please confirm your password' }}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+      </form>
+      <p class="text-center mt-3">Already have an account? <a role="button" (click)="loginNow()">Login</a></p>
+    </div>
+  </div>
+</div>

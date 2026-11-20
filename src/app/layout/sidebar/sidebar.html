@@ -1,0 +1,82 @@
+<div id="layoutSidenav_nav" [class.sidebar-hide]="!isSidebarOpen">
+  <nav class="sb-sidenav accordion sb-sidenav-dark Larger shadow" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+      <!-- ======================Manager Sidebar  Start========================== -->
+
+        <div class="nav" *ngIf="role=='Admin'">
+        <a class="nav-link" [routerLink]="['/AdminDashboard']" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+          Dashboard
+        </a>
+        <a class="nav-link" [routerLink]="['/AdminDashboard/users']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+          All Users
+        </a>
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/lease']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-book-open-reader font-color"></i></div>
+          Lease
+        </a> -->
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/Requests']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          Requests
+        </a> -->
+
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/applications']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-users font-color"></i></div>
+          Applications
+        </a> -->
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/filemanager']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-folder-open"></i></div>
+          File Manager
+        </a> -->
+        <!-- <a class="nav-link pointer" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+          Downloads
+        </a> -->
+      </div>
+   
+      <!-- ======================== Manager Sidebar  End========================= -->
+
+      <!-- ======================User Sidebar Start========================== -->
+
+      <div class="nav" *ngIf="role=='User'">
+        <a class="nav-link" [routerLink]="['/Dashboard']" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+          Dashboard
+        </a>
+        <a class="nav-link" [routerLink]="['/Dashboard/task']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+          User Task
+        </a>
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/lease']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-book-open-reader font-color"></i></div>
+          Lease
+        </a> -->
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/Requests']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          Requests
+        </a> -->
+
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/applications']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-users font-color"></i></div>
+          Applications
+        </a> -->
+        <!-- <a class="nav-link" [routerLink]="['/dashboard/filemanager']" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-folder-open"></i></div>
+          File Manager
+        </a> -->
+        <!-- <a class="nav-link pointer" routerLinkActive="active">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+          Downloads
+        </a> -->
+      </div>
+      <!-- ======================== User Sidebar  End========================= -->
+    </div>
+
+    <div class="sb-sidenav-footer">
+      <div class="small bi bi-person-circle text-light">&nbsp; {{role}} Logged in</div>
+    </div>
+  </nav>
+</div>

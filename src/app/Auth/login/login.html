@@ -1,0 +1,24 @@
+<!-- src/app/login/login.component.html -->
+<div class="container mt-5" style="max-width: 400px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4">Login</h3>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input formControlName="email" class="form-control" [ngClass]="{'is-invalid': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
+          <div class="invalid-feedback">Enter a valid email</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input formControlName="password"  class="form-control" [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
+          <div class="invalid-feedback">Password is required</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+      </form>
+      <p class="text-center mt-3">Don't have an account? <a role="button" (click)="registerNow()">Register</a></p>
+    </div>
+  </div>
+</div>

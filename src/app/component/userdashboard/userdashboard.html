@@ -1,0 +1,27 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm p-3" style="width: 250px;" *ngIf="userData">
+
+                <!-- Avatar -->
+                <div class="d-flex justify-content-center">
+                    <div
+                        class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center">
+                        {{ userData.firstName.charAt(0).toUpperCase() }}{{ userData.lastName.charAt(0).toUpperCase() }}
+                    </div>
+                </div>
+
+                <!-- User Info -->
+                <div class="card-body">
+                    <h5 class="card-title mb-1">
+                        {{ userData.firstName }} {{ userData.lastName }}
+                    </h5>
+                    <p class="card-text text-muted">
+                        {{ userData.email }}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
